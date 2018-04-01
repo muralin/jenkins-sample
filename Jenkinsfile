@@ -16,14 +16,14 @@ pipeline {
     stage('Docker Build') {
       agent any
       steps {
-        sh 'docker build -t shanem/spring-petclinic:latest .'
+        sh 'docker build -t muralin/spring-petclinic:latest .'
       }
     }
     stage('Docker Push') {
       agent any
       steps {
-        withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-          sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+        withCredentials([usernamePassword(credentialsId: 'mkDockerHub', passwordVariable: 'mkDockerHubPassword', usernameVariable: 'mkDockerHubUser')]) {
+          sh "docker login -u ${env.mkDockerHubUser} -p ${env.mkDockerHubPassword}"
           sh 'docker push muralin/spring-petclinic:latest'
         }
       }
