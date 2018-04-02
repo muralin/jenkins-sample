@@ -16,7 +16,7 @@ pipeline {
     stage('Docker Build') {
       agent any
       steps {
-        sh 'docker build -t muralin/spring-petclinic:latest .'
+        sh 'docker build -t mnallathiga/spring-petclinic:latest .'
       }
     }
     stage('Docker Push') {
@@ -24,9 +24,15 @@ pipeline {
       steps {
         withCredentials([usernamePassword(credentialsId: 'mkDockerHub', passwordVariable: 'mkDockerHubPassword', usernameVariable: 'mkDockerHubUser')]) {
           sh "docker login -u ${env.mkDockerHubUser} -p ${env.mkDockerHubPassword}"
-          sh 'docker push muralin/spring-petclinic:latest'
+          sh 'docker push mnallathiga/spring-petclinic:latest'
         }
       }
+    }
+    post {
+        always {
+            archive "target/**/*"
+            junit 'target/surefire-reports/*.xml'
+        }
     }
   }
 }
